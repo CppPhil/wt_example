@@ -1,6 +1,0 @@
-[submodule "external/wt"]
-	path = external/wt
-	url = https://github.com/emweb/wt.git
-[submodule "external/philslib"]
-	path = external/philslib
-	url = https://github.com/CppPhil/philslib.git
