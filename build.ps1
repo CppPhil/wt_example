@@ -11,6 +11,8 @@ $boost_archive_path = "$boost_root_path\$archive_name"
 $download_url = "https://boostorg.jfrog.io/artifactory/main/release/$boost_version/source/$archive_name"
 $bootstrap_script_path = "$boost_directory_path\bootstrap.bat"
 
+Clear-Host
+
 if (-Not (Test-Path -Path $boost_directory_path)) {
   Write-Output "$boost_directory_path does not exist. Creating ..."
   mkdir -p $boost_directory_path
@@ -33,14 +35,20 @@ if (-Not (Test-Path -Path $boost_directory_path)) {
   Write-Output "Starting bootstrapping process ..."
   Start-Process -FilePath $bootstrap_script_path -Wait -NoNewWindow -PassThru
   Write-Output "Finished bootstrapping."
+  Start-Sleep -Seconds 2
+  Clear-Host
 
   Write-Output "Starting build process for Boost $boost_version ..."
   Start-Process -FilePath .\b2 -Wait -NoNewWindow -PassThru
   Write-Output "Built Boost $boost_version."
+  Start-Sleep -Seconds 2
+  Clear-Host
 
   Pop-Location
 } else {
   Write-Output "$boost_directory_path already exists. Assuming it contains a valid installation of Boost $boost_version."
+  Start-Sleep -Seconds 1
+  Clear-Host
 }
 
 $build_dir = "$PSScriptRoot\build"
