@@ -69,7 +69,7 @@ set(INSTALL_RESOURCES
     OFF
     CACHE BOOL "Install resources directory" FORCE)
 set(ENABLE_SSL
-    ON
+    OFF
     CACHE BOOL "Enable cryptography functions, using OpenSSL" FORCE)
 set(ENABLE_HARU
     OFF
