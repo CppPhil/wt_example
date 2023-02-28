@@ -1,23 +1,56 @@
-cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.25)
 
 project(wt_example_project VERSION 1.0.0)
 
 enable_testing()
 
-string(
-  APPEND
-  CMAKE_CXX_FLAGS
-  " -Werror -Wall -Wextra -Wstrict-aliasing -Wcast-align -Wpointer-arith -Wunreachable-code -Wno-unused-function -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-implicit-fallthrough -Wno-redundant-move -Wno-deprecated-declarations -Wno-deprecated-copy -Wno-sign-compare -Wno-misleading-indentation -Wno-switch -Wno-type-limits -Wno-empty-body -Wno-stringop-truncation -Wno-maybe-uninitialized"
-)
-
-string(APPEND CMAKE_CXX_FLAGS_DEBUG " -g -O0 -DDEBUG_MODE")
-string(APPEND CMAKE_CXX_FLAGS_RELEASE " -g -O3 -DNDEBUG -DRELEASE_MODE")
-
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_EXTENSIONS ON)
 
 find_package(Threads REQUIRED)
+
+# Boost
+set(Boost_USE_STATIC_LIBS ON)
+find_package(
+  Boost
+  ${BOOST_VERSION_TO_USE} EXACT REQUIRED
+  COMPONENTS 
+  atomic
+  chrono
+  container
+  context
+  coroutine
+  date_time
+  exception
+  fiber
+  filesystem
+  graph
+  iostreams
+  locale
+  log
+  log_setup
+  math_c99
+  math_c99f
+  math_c99l
+  math_tr1
+  math_tr1f
+  math_tr1l
+  nowide
+  prg_exec_monitor
+  program_options
+  random
+  regex
+  serialization
+  stacktrace_noop
+  system
+  test_exec_monitor
+  thread
+  timer
+  type_erasure
+  unit_test_framework
+  wave
+  wserialization)
 
 # Wt
 set(SHARED_LIBS
@@ -106,9 +139,12 @@ add_subdirectory(external/philslib)
 # STATIC LIBRARY
 set(LIB_NAME wt_example_lib)
 
-set(LIB_HEADERS include/global.hpp include/hello_application.hpp)
+set(LIB_HEADERS 
+    include/global.hpp 
+    include/hello_application.hpp)
 
-set(LIB_SOURCES src/hello_application.cpp)
+set(LIB_SOURCES 
+    src/hello_application.cpp)
 
 add_library(${LIB_NAME} STATIC ${LIB_HEADERS} ${LIB_SOURCES})
 
@@ -120,8 +156,49 @@ target_include_directories(
          ${wt_example_project_SOURCE_DIR}/external/wt/src/Wt/Date/include
          ${BOOST_INCLUDE_DIRS})
 
-target_link_libraries(${LIB_NAME} PUBLIC Threads::Threads ${WT_CONNECTOR} wt
-                                         CppPhil::philslib)
+target_link_libraries(
+  ${LIB_NAME} 
+  PUBLIC 
+  Threads::Threads 
+  Boost::headers
+  Boost::atomic
+  Boost::chrono
+  Boost::container
+  Boost::context
+  Boost::coroutine
+  Boost::date_time
+  Boost::exception
+  Boost::fiber
+  Boost::filesystem
+  Boost::graph
+  Boost::iostreams
+  Boost::locale
+  Boost::log
+  Boost::log_setup
+  Boost::math_c99
+  Boost::math_c99f
+  Boost::math_c99l
+  Boost::math_tr1
+  Boost::math_tr1f
+  Boost::math_tr1l
+  Boost::nowide
+  Boost::prg_exec_monitor
+  Boost::program_options
+  Boost::random
+  Boost::regex
+  Boost::serialization
+  Boost::stacktrace_noop
+  Boost::system
+  Boost::test_exec_monitor
+  Boost::thread
+  Boost::timer
+  Boost::type_erasure
+  Boost::unit_test_framework
+  Boost::wave
+  Boost::wserialization
+  ${WT_CONNECTOR}
+  wt
+  CppPhil::philslib)
 
 # APPLICATION
 set(APP_NAME wt_example_app)
